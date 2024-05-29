@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.praxedo.com/v6/businessEvent" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" name="BusinessEventAttachmentManagerService" targetNamespace="http://ws.praxedo.com/v6/businessEvent" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://ws.praxedo.com/policies/v1.0" location="https://am2.praxedo.com/eTech/services/cxf/v6/BusinessEventAttachmentManager?wsdl=Pxo-policies-v1.0.wsdl" />
+  <wsdl:types>
+    <xsd:schema xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ws.praxedo.com/v6/businessEvent">
+      <xs:import namespace="http://www.w3.org/2005/05/xmlmime" />
+      <xs:element name="createAttachment" type="tns:createAttachment" />
+      <xs:element name="createAttachmentResponse" type="tns:createAttachmentResponse" />
+      <xs:element name="deleteAttachment" type="tns:deleteAttachment" />
+      <xs:element name="deleteAttachmentResponse" type="tns:deleteAttachmentResponse" />
+      <xs:element name="getAttachmentContent" type="tns:getAttachmentContent" />
+      <xs:element name="getAttachmentContentResponse" type="tns:getAttachmentContentResponse" />
+      <xs:element name="listAttachments" type="tns:listAttachments" />
+      <xs:element name="listAttachmentsResponse" type="tns:listAttachmentsResponse" />
+      <xs:complexType name="getAttachmentContent">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="attachmentId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="options" type="tns:wsEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="wsEntry">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="key" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getAttachmentContentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:attachmentContentOperationResult" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="attachmentContentOperationResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:operationResult">
+            <xs:sequence>
+              <xs:element xmime:expectedContentTypes="application/octet-stream" minOccurs="0" name="content" type="xs:base64Binary" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="operationResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:simpleOperationResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="warnings" nillable="true" type="tns:simpleOperationResult" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="simpleOperationResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+          <xs:element name="resultCode" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="deleteAttachment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="attachment" type="tns:attachment" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="options" type="tns:wsEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="attachment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="entityId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="extensions" nillable="true" type="tns:wsValuedEntry" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="wsValuedEntry">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:wsEntry">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="value" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="deleteAttachmentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:operationResult" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="listAttachments">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="businessEventId" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="options" type="tns:wsEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="listAttachmentsResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:attachmentsRequestResult" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="attachmentsRequestResult">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:entitiesRequestResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="entities" type="tns:extendedAttachment" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="entitiesRequestResult" abstract="true">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:operationResult">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="extendedAttachment">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:attachment">
+            <xs:sequence>
+              <xs:element name="addedOnDevice" type="xs:boolean" />
+              <xs:element minOccurs="0" name="creationDate" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="description" type="xs:string" />
+              <xs:element name="external" type="xs:boolean" />
+              <xs:element minOccurs="0" name="id" type="xs:string" />
+              <xs:element minOccurs="0" name="lastModificationDate" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="size" type="xs:int" />
+              <xs:element name="unmodifiable" type="xs:boolean" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="createAttachment">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="attachment" type="tns:attachment" />
+          <xs:element xmime:expectedContentTypes="application/octet-stream" minOccurs="0" name="stream" type="xs:base64Binary" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="options" type="tns:wsEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="createAttachmentResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:operationResult" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="WSFault" nillable="true" type="tns:simpleOperationResult" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="deleteAttachment">
+    <wsdl:part name="parameters" element="tns:deleteAttachment" />
+  </wsdl:message>
+  <wsdl:message name="getAttachmentContent">
+    <wsdl:part name="parameters" element="tns:getAttachmentContent" />
+  </wsdl:message>
+  <wsdl:message name="listAttachmentsResponse">
+    <wsdl:part name="parameters" element="tns:listAttachmentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="WSException">
+    <wsdl:part name="WSException" element="tns:WSFault" />
+  </wsdl:message>
+  <wsdl:message name="createAttachment">
+    <wsdl:part name="parameters" element="tns:createAttachment" />
+  </wsdl:message>
+  <wsdl:message name="createAttachmentResponse">
+    <wsdl:part name="parameters" element="tns:createAttachmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteAttachmentResponse">
+    <wsdl:part name="parameters" element="tns:deleteAttachmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="listAttachments">
+    <wsdl:part name="parameters" element="tns:listAttachments" />
+  </wsdl:message>
+  <wsdl:message name="getAttachmentContentResponse">
+    <wsdl:part name="parameters" element="tns:getAttachmentContentResponse" />
+  </wsdl:message>
+  <wsdl:portType name="BusinessEventAttachmentManager">
+    <wsdl:operation name="getAttachmentContent">
+      <wsdl:input name="getAttachmentContent" message="tns:getAttachmentContent" />
+      <wsdl:output name="getAttachmentContentResponse" message="tns:getAttachmentContentResponse" />
+      <wsdl:fault name="WSException" message="tns:WSException" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteAttachment">
+      <wsdl:input name="deleteAttachment" message="tns:deleteAttachment" />
+      <wsdl:output name="deleteAttachmentResponse" message="tns:deleteAttachmentResponse" />
+      <wsdl:fault name="WSException" message="tns:WSException" />
+    </wsdl:operation>
+    <wsdl:operation name="listAttachments">
+      <wsdl:input name="listAttachments" message="tns:listAttachments" />
+      <wsdl:output name="listAttachmentsResponse" message="tns:listAttachmentsResponse" />
+      <wsdl:fault name="WSException" message="tns:WSException" />
+    </wsdl:operation>
+    <wsdl:operation name="createAttachment">
+      <wsdl:input name="createAttachment" message="tns:createAttachment" />
+      <wsdl:output name="createAttachmentResponse" message="tns:createAttachmentResponse" />
+      <wsdl:fault name="WSException" message="tns:WSException" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BusinessEventAttachmentManagerServiceSoapBinding" type="tns:BusinessEventAttachmentManager">
+    <wsp:PolicyReference URI="#OptionalAttachmentPolicy" wsdl:required="true" />
+    <wsp:PolicyReference URI="#SecureTransportBasicAuthPolicy" wsdl:required="true" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="deleteAttachment">
+      <soap12:operation soapAction="deleteAttachment" style="document" />
+      <wsdl:input name="deleteAttachment">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="deleteAttachmentResponse">
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap12:fault use="literal" name="WSException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAttachmentContent">
+      <soap12:operation soapAction="getAttachmentContent" style="document" />
+      <wsdl:input name="getAttachmentContent">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAttachmentContentResponse">
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap12:fault use="literal" name="WSException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAttachments">
+      <soap12:operation soapAction="listAttachments" style="document" />
+      <wsdl:input name="listAttachments">
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="listAttachmentsResponse">
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap12:fault use="literal" name="WSException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createAttachment">
+      <soap12:operation soapAction="createAttachment" style="document" />
+      <wsdl:input name="createAttachment">
+        <wsp:PolicyReference URI="#AttachmentPolicy" wsdl:required="true" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createAttachmentResponse">
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="WSException">
+        <soap12:fault use="literal" name="WSException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BusinessEventAttachmentManagerService">
+    <wsdl:port name="BusinessEventAttachmentManagerPort" binding="tns:BusinessEventAttachmentManagerServiceSoapBinding">
+      <soap12:address location="https://am2.praxedo.com/eTech/services/cxf/v6/BusinessEventAttachmentManager" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
